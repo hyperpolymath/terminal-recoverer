@@ -16,19 +16,19 @@
 
 == Harvard Style
 
-Polymath, H. (2025) _RSR-template-repo_ [Computer software]. Available at: https://github.com/hyperpolymath/RSR-template-repo
+Jewell, J. (2025) _RSR-template-repo_ [Computer software]. Available at: https://github.com/hyperpolymath/RSR-template-repo
 
 == OSCOLA
 
-Hyper Polymath, 'RSR-template-repo' (2025) <https://github.com/hyperpolymath/RSR-template-repo>
+Jonathan Jewell, 'RSR-template-repo' (2025) <https://github.com/hyperpolymath/RSR-template-repo>
 
 == MLA
 
-Polymath, Hyper. "RSR-template-repo." 2025, github.com/hyperpolymath/RSR-template-repo.
+Jewell, Jonathan. "RSR-template-repo." 2025, github.com/hyperpolymath/RSR-template-repo.
 
 == APA 7
 
-Polymath, H. (2025). _RSR-template-repo_ [Computer software]. GitHub. https://github.com/hyperpolymath/RSR-template-repo
+Jewell, J. (2025). _RSR-template-repo_ [Computer software]. GitHub. https://github.com/hyperpolymath/RSR-template-repo
 
 == See Also
 
