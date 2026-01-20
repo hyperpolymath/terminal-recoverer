@@ -1,0 +1,13 @@
+== Interactive Shell Sequence
+
+[sequence]
+User -> bash: open interactive shell
+bash -> recoverer.sh: sourced from ~/.bashrc.d
+recoverer.sh -> bash: PROMPT_COMMAND="history -a; ..."
+recoverer.sh -> bash: check ENABLE_TERMINAL_LOGGING
+bash -> terminal-recoverer: log-shell (if enabled)
+
+terminal-recoverer -> bash: detect interactive + no recursion
+terminal-recoverer -> FS: mkdir -p ~/Documents/terminal-logs
+terminal-recoverer -> script(1): start recording to timestamped log
+script(1) --> User: full terminal session recorded
