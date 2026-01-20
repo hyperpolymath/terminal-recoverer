@@ -126,6 +126,8 @@ It aims to:
 It is intentionally simple: no daemons, no heavy dependencies, no magic.
 
 == License
+Terminal-recoverer is licensed under the Palimpsest License. 
 
-<your chosen license>
+The canonical legal text is maintained in the central licensing repository: https://github.com/hyperpolymath/palimpsest-license/ 
 
+This repository includes only an SPDX stub for reference.
