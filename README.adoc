@@ -1,12 +1,127 @@
-= RSR template repo - see RSR_OUTLINE.adoc in root for general background and specification
+= Terminal Recoverer
+Jonathan Jewell <you@example.com>
+:toc:
+:icons: font
 
-== This is your repo - don't forget to rename me!
+Terminal Recoverer is a lightweight continuity steward for your terminal environment.
+It provides three core capabilities:
 
-== AI CLI standards
+* A persistent `tmux` recovery session available at all times.
+* Optional full-session logging for interactive shells.
+* A best-effort crash-capture pipeline triggered by `systemd-coredump`.
 
-- Include `ai-cli-crash-capture/` and `contractiles/` from this template in new repos.
-- Mirror 6SCM files into `.machine_readable/6scm/`.
-- Before any code generation, check `/var/mnt/eclipse/repos/proven` for the current Idris “unbreakable” library status.
-- If a project uses that Idris library, add an *Idris Inside* badge to the repo.
-- If new bindings are required, add them in `/var/mnt/eclipse/repos/proven` as `idris2-zig-<language>` during the work.
-- If new code suggests additional “unbreakable” Idris modules, add them under `/var/mnt/eclipse/repos/proven` and update binders across all supported languages.
+The goal is simple: reduce loss, preserve context, and make post-crash investigation humane.
+
+== Features
+
+=== Persistent Recovery Session
+A user-level systemd service ensures a `tmux` session named `recovery` is always running.
+If your terminal crashes, you can immediately reattach:
+
+----
+tmux attach -t recovery
+----
+
+=== Optional Terminal Session Logging
+When enabled, each interactive shell is recorded using `script(1)` into timestamped logs:
+
+----
+~/Documents/terminal-logs/terminal-YYYY-MM-DD-HHMMSS.log
+----
+
+Enable it by exporting:
+
+----
+export ENABLE_TERMINAL_LOGGING=1
+----
+
+=== Crash Capture Pipeline
+A background watcher listens for `systemd-coredump` events.
+For each crash, it creates a structured capture directory:
+
+----
+~/Documents/crash-captures/coredump-YYYY-MM-DD-HHMMSS/
+----
+
+Each capture includes:
+
+* triggering journal line
+* system metadata (uname, uptime)
+* recent system, kernel, and user logs
+* `coredumpctl` output (if available)
+* `dmesg`, `top`, `ps`, `free`, `df`, `lsblk`
+* failed user systemd units
+
+This forms a self-contained forensic bundle for debugging.
+
+== Installation
+
+Clone the repository and run:
+
+----
+./install.sh
+----
+
+This installs:
+
+* `~/.local/bin/terminal-recoverer`
+* `~/.bashrc.d/recoverer.sh`
+* `~/.config/systemd/user/terminal-recoverer.service`
+* `~/.config/systemd/user/terminal-recoverer-coredump.service`
+* `~/terminal-recoverer-HOWTO.txt`
+
+== Enabling Services
+
+Start the recovery session steward:
+
+----
+systemctl --user enable --now terminal-recoverer.service
+----
+
+Enable the crash-capture watcher:
+
+----
+systemctl --user enable --now terminal-recoverer-coredump.service
+----
+
+== Usage
+
+=== Ensure recovery session exists
+----
+terminal-recoverer ensure
+----
+
+=== Start terminal logging for this shell
+----
+terminal-recoverer log-shell
+----
+
+=== Start coredump watcher manually
+----
+terminal-recoverer watch-coredump
+----
+
+== Directory Layout
+
+----
+~/Documents/terminal-logs/        # Optional session logs
+~/Documents/crash-captures/       # Crash forensic bundles
+----
+
+== Philosophy
+
+Terminal Recoverer is designed as a small, narratable subsystem.
+It aims to:
+
+* minimise irreversible loss
+* preserve context during failure
+* provide structured, timestamped artefacts
+* operate quietly in the background
+* remain fully user-controlled and reversible
+
+It is intentionally simple: no daemons, no heavy dependencies, no magic.
+
+== License
+
+<your chosen license>
+
