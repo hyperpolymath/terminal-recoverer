@@ -1,0 +1,18 @@
+== Crash Capture Sequence
+
+[sequence]
+Kernel -> systemd-coredump: process crash
+systemd-coredump -> journal: emit coredump log entry
+
+journal -> terminal-recoverer-coredump.service: journalctl -f SYSLOG_IDENTIFIER=systemd-coredump
+
+terminal-recoverer-coredump.service -> terminal-recoverer: watch-coredump
+terminal-recoverer -> FS: mkdir crash-captures/coredump-<timestamp>
+
+terminal-recoverer -> journalctl: fetch recent system logs
+terminal-recoverer -> coredumpctl: fetch coredump metadata
+terminal-recoverer -> dmesg: capture kernel ring buffer
+terminal-recoverer -> top/ps/free/df/lsblk: capture system state
+terminal-recoverer -> FS: write all artefacts into capture directory
+
+terminal-recoverer --> User: crash bundle available for inspection
