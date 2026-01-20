@@ -1,0 +1,32 @@
+== Governance Contract
+
+The Terminal Recoverer subsystem operates under a set of explicit invariants and guarantees.
+These define its behaviour, boundaries, and responsibilities.
+
+[plantuml, governance-contract, svg]
+----
+@startuml
+title Terminal Recoverer – Governance Contract
+
+actor User
+rectangle "Terminal Recoverer" {
+  rectangle "Invariants" {
+    (*) --> "Never modifies user data outside its own directories"
+    --> "Never runs unless explicitly invoked or enabled"
+    --> "Never logs without ENABLE_TERMINAL_LOGGING=1"
+    --> "Crash captures are read-only artefacts"
+    --> "All artefacts are timestamped and isolated"
+  }
+
+  rectangle "Guarantees" {
+    (*) --> "Ensures tmux recovery session exists at login"
+    --> "Flushes shell history immediately"
+    --> "Captures best-effort crash bundles on coredump events"
+    --> "Produces no background load beyond journal tailing"
+    --> "All behaviour is reversible and user-controlled"
+  }
+}
+
+User --> "Terminal Recoverer": invokes, enables, or inspects
+@enduml
+----
