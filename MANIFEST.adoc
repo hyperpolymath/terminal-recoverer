@@ -1,0 +1,54 @@
+= Sentinel Manifest
+:icons: font
+:toc:
+
+Sentinel is a continuity steward for the terminal environment.  
+Its purpose is to reduce irreversible loss, preserve context during failure, and
+provide structured artefacts that support investigation and recovery.
+
+== Purpose
+
+Sentinel exists to:
+
+* maintain a persistent recovery workspace (`tmux` session)
+* optionally record interactive terminal sessions
+* capture structured crash bundles when `systemd-coredump` fires
+* minimise loss of shell history
+* operate quietly, predictably, and only with explicit user consent
+
+== Scope
+
+Sentinel governs the following domains:
+
+* user-level systemd services
+* interactive shell logging
+* crash-capture pipelines
+* timestamped artefact storage
+
+It does *not* modify system configuration, escalate privileges, or alter user data
+outside its own directories.
+
+== Invariants
+
+Sentinel guarantees:
+
+* no logging occurs unless explicitly enabled
+* all artefacts are timestamped and isolated
+* all behaviour is reversible and user-controlled
+* no background load beyond journal tailing
+* no mutation of user data outside `~/Documents/terminal-logs` and `~/Documents/crash-captures`
+
+== Lifecycle
+
+Sentinel is activated through:
+
+* `terminal-recoverer.service` at login
+* `terminal-recoverer-coredump.service` for crash watching
+* optional shell logging via `ENABLE_TERMINAL_LOGGING=1`
+
+Deactivation is immediate and leaves no residual state beyond stored artefacts.
+
+== Identity
+
+Sentinel is a quiet steward, not a daemon.  
+It preserves continuity through clarity, not through prediction or intervention.
