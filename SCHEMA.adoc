@@ -1,0 +1,42 @@
+= Crash Capture Schema
+:icons: font
+
+Each crash event produces a structured directory:
+
+----
+coredump-YYYY-MM-DD-HHMMSS/
+----
+
+== Directory Structure
+
+* `journal-line.txt` — triggering journal entry
+* `meta.txt` — timestamp, uname, uptime
+* `journal-errors.txt` — system errors (last 2 minutes)
+* `journal-kernel-errors.txt` — kernel errors (last 2 minutes)
+* `journal-user-errors.txt` — user-session errors (last 2 minutes)
+* `coredump-journal.txt` — all coredump-related journal entries
+* `coredumpctl.txt` — metadata from `coredumpctl` (if available)
+* `dmesg.txt` — kernel ring buffer
+* `top.txt` — snapshot of system load
+* `ps.txt` — process table
+* `free.txt` — memory state
+* `df.txt` — filesystem state
+* `lsblk.txt` — block device layout
+* `systemd-user-failed.txt` — failed user units
+
+== Field Requirements
+
+All files must:
+
+* be plain text
+* be generated atomically
+* be timestamped via directory name
+* contain no personally identifying data beyond what the system itself emits
+
+== Stability Guarantees
+
+The schema is:
+
+* append-only (new files may be added)
+* non-breaking (existing files will not change meaning)
+* versionless by design (timestamp is the canonical version)
